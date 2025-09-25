@@ -1,39 +1,44 @@
 defmodule AbacatepayElixirSdk.BillingClientTest do
   use ExUnit.Case
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
-  test "list billings returns a response from the real API" do
-    result = AbacatepayElixirSdk.BillingClient.list()
-    assert is_tuple(result)
+  alias AbacatepayElixirSdk.BillingClient
+
+  setup_all do
+    ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
+    :ok
   end
 
-  test "create billing returns a response from the real API" do
-    billing = %{
-      frequency: "ONE_TIME",
-      methods: ["PIX"],
-      products: [
-        %{
-          external_id: "abc_123",
-          name: "Product A",
-          description: "Description of product A",
-          quantity: 1,
-          price: 100
+  describe "create/1" do
+    test "creates a billing successfully" do
+      use_cassette "billing_create_success" do
+        params = %{
+          amount: 1000,
+          description: "Test billing",
+          frequency: "oneTime"
         }
-      ],
-      metadata: %{},
-      customer: %{}
-    }
-    result = AbacatepayElixirSdk.BillingClient.create(billing)
-    assert is_tuple(result)
+
+        assert {:ok, billing} = BillingClient.create(params)
+        assert is_binary(billing.id)
+        assert billing.url != nil
+      end
+    end
+
+    test "handles error response" do
+      use_cassette "billing_create_error" do
+        params = %{invalid: "data"}
+
+        assert {:error, _error} = BillingClient.create(params)
+      end
+    end
   end
 
-  test "create billing with invalid data returns an error" do
-    billing = %{}
-    result = AbacatepayElixirSdk.BillingClient.create(billing)
-    assert {:error, _} = result
-  end
-
-  test "list billings always returns a list" do
-    {:ok, billings} = AbacatepayElixirSdk.BillingClient.list()
-    assert is_list(billings)
+  describe "list/0" do
+    test "lists billings successfully" do
+      use_cassette "billing_list_success" do
+        assert {:ok, billings} = BillingClient.list()
+        assert is_list(billings)
+      end
+    end
   end
 end

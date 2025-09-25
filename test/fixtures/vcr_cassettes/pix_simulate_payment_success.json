@@ -1,0 +1,39 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "{\"metadata\":{\"test\":\"data\"}}",
+      "url": "https://api.abacatepay.com/v1/pixQrCode/simulate-payment?id=test-qr-id",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "post",
+      "request_body": ""
+    },
+    "response": {
+      "binary": false,
+      "type": "ok",
+      "body": "{\"error\":\"Pix QRCode not found\"}",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:39:39 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "32",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
+        "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+        "access-control-allow-origin": "*",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=jQWaIzRtYVhtNMOcRkKmiaf1lt%2FIeko584BywGT4f6gqBEkublNzmySqvVFnL0%2FNN7gqvTa4NKu3H%2B2ibGXAnqZ8X%2FqB%2BoradZP3lJwISOU%3D\"}]}",
+        "cf-ray": "984b9d912cb6210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 400
+    }
+  }
+]

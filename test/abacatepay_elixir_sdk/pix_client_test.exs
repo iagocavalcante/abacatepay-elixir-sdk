@@ -1,29 +1,58 @@
 defmodule AbacatepayElixirSdk.PixClientTest do
   use ExUnit.Case
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
-  test "create, simulate payment, and check status for pix qrcode via real API" do
-    params = %{
-      amount: 123,
-      expiresIn: 123,
-      description: "Pagamento Pix",
-      customer: %{
-        name: "Daniel Lima",
-        cellphone: "(11) 4002-8922",
-        email: "daniel_lima@abacatepay.com",
-        taxId: "123.456.789-01"
-      }
-    }
-    # Create QRCode
-    {:ok, qrcode_data} = AbacatepayElixirSdk.PixClient.create_qrcode(params)
-    assert is_map(qrcode_data)
-    assert id = qrcode_data["id"]
+  alias AbacatepayElixirSdk.PixClient
 
-    # Simulate payment
-    result_sim = AbacatepayElixirSdk.PixClient.simulate_payment(id, %{})
-    assert is_tuple(result_sim)
+  setup_all do
+    ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
+    :ok
+  end
 
-    # Check status
-    result_status = AbacatepayElixirSdk.PixClient.check_status(id)
-    assert is_tuple(result_status)
+  describe "create_qrcode/1" do
+    test "creates a PIX QR code successfully" do
+      use_cassette "pix_create_qrcode_success" do
+        params = %{
+          amount: 1000,
+          description: "Test PIX payment"
+        }
+
+        assert {:ok, qr_data} = PixClient.create_qrcode(params)
+        assert is_binary(qr_data["qrCode"])
+        assert is_binary(qr_data["paymentLink"])
+        assert is_binary(qr_data["id"])
+      end
+    end
+
+    test "handles error response" do
+      use_cassette "pix_create_qrcode_error" do
+        params = %{invalid: "data"}
+
+        assert {:error, _error} = PixClient.create_qrcode(params)
+      end
+    end
+  end
+
+  describe "check_status/1" do
+    test "checks PIX QR code status successfully" do
+      use_cassette "pix_check_status_success" do
+        qr_id = "test-qr-id"
+
+        assert {:ok, status_data} = PixClient.check_status(qr_id)
+        assert Map.has_key?(status_data, "status")
+      end
+    end
+  end
+
+  describe "simulate_payment/2" do
+    test "simulates PIX payment successfully" do
+      use_cassette "pix_simulate_payment_success" do
+        qr_id = "test-qr-id"
+        metadata = %{test: "data"}
+
+        assert {:ok, payment_data} = PixClient.simulate_payment(qr_id, metadata)
+        assert Map.has_key?(payment_data, "status")
+      end
+    end
   end
 end

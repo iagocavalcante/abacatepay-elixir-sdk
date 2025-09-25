@@ -1,0 +1,36 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "{\"invalid\":\"data\"}",
+      "url": "https://api.abacatepay.com/v1/withdraw/create",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "post",
+      "request_body": ""
+    },
+    "response": {
+      "binary": false,
+      "type": "ok",
+      "body": "{\"error\":\"body must have required property 'amount'\",\"statusCode\":400}",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:39:38 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "70",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8ZcYiPP3t3Pgl90ln0I1Et395Vs6T%2Bi6a%2FZb3Rhb6nWxqlRm1QzI1iACv4BoF4IMex74dwmkJQmzWkr56vhx7mSZtQWLHr9HF8CBqbscPy8%3D\"}]}",
+        "cf-ray": "984b9d8f4f7f210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 400
+    }
+  }
+]

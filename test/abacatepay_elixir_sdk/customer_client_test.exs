@@ -1,20 +1,46 @@
 defmodule AbacatepayElixirSdk.CustomerClientTest do
   use ExUnit.Case
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
-  test "create customer returns a response from the real API" do
-    customer = %{
-      name: "Daniel Lima",
-      cellphone: "(11) 4002-8922",
-      email: "daniel_lima@abacatepay.com",
-      taxId: "123.456.789-01"
-    }
-    result = AbacatepayElixirSdk.CustomerClient.create(customer)
-    assert is_tuple(result)
+  alias AbacatepayElixirSdk.CustomerClient
+
+  setup_all do
+    ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
+    :ok
   end
 
-  test "create customer with invalid data returns an error" do
-    customer = %{}
-    result = AbacatepayElixirSdk.CustomerClient.create(customer)
-    assert {:error, _} = result
+  describe "create/1" do
+    test "creates a customer successfully" do
+      use_cassette "customer_create_success" do
+        params = %{
+          name: "João Silva",
+          email: "joao@example.com",
+          cellphone: "11999999999",
+          taxId: "11144477735"
+        }
+
+        assert {:ok, customer} = CustomerClient.create(params)
+        assert is_binary(customer["id"])
+        assert customer["name"] == "João Silva"
+        assert customer["email"] == "joao@example.com"
+      end
+    end
+
+    test "handles error response" do
+      use_cassette "customer_create_error" do
+        params = %{invalid: "data"}
+
+        assert {:error, _error} = CustomerClient.create(params)
+      end
+    end
+  end
+
+  describe "list/0" do
+    test "lists customers successfully" do
+      use_cassette "customer_list_success" do
+        assert {:ok, customers} = CustomerClient.list()
+        assert is_list(customers)
+      end
+    end
   end
 end

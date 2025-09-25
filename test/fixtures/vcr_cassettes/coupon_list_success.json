@@ -1,0 +1,40 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "",
+      "url": "https://api.abacatepay.com/v1/coupon/list",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "get",
+      "request_body": ""
+    },
+    "response": {
+      "binary": true,
+      "type": "ok",
+      "body": "g20AAAAsH4sIAAAAAAAA/6tWSi0qyi9SssorzcnRUUpJLElUsoqOrQUAe5omphgAAAA=",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:39:38 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "transfer-encoding": "chunked",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
+        "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+        "access-control-allow-origin": "*",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=p1cxEvkcGOOIjswtZXQOxWMez4NRj9bvY6iFls4IeBuXLW7Pes08yaFCMz2e0L%2FI9kBNC2JGh3jUnGMNtx2twHWrqmCXdnCbfyWljLzuUpk%3D\"}]}",
+        "content-encoding": "gzip",
+        "cf-ray": "984b9d8aaa20210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 200
+    }
+  }
+]

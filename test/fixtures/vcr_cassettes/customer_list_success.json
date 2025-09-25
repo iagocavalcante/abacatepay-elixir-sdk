@@ -1,0 +1,40 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "",
+      "url": "https://api.abacatepay.com/v1/customer/list",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "get",
+      "request_body": ""
+    },
+    "response": {
+      "binary": true,
+      "type": "ok",
+      "body": "g20AAAEzH4sIAAAAAAAA/4XQW2uDMBQH8K9S8rpSTOq1T3V262VQ5irMOcY402Bl8TKNRRG/+47bGMKEQR7COTn//JKO8LLMS7LKaiHmJAIJZPXckSQiKxLWlXw9+c2DdzhEbl1AEFSqd9Qzd3sEMicpl/A90ZEMUo4jd1AKmDlwARFCJjmeCrkQxTnPhvaVplnUwqXixsKmhGY/XKUoTLGYbjFTxypPIRFYfR/SFmwR5pWEdTxUcZ+Svp+Pic7GXrbXRV0/3myY51dBcN/QXbubJu4hzv8TmtSgGluykdA0Td1QKWMGGwkTDAt/s9Zn3k4Bt6nvN27wIaHNbE369q0fKfHT2zTQwVfn1eyUiAv81VH8PwsxhmGMdJRSVVWxttRGuvArac0bSAvBf2Qv/SfvVqqJ9QEAAA==",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:39:37 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "transfer-encoding": "chunked",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
+        "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+        "access-control-allow-origin": "*",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8j0GkV8gCBlbyTBjKPMSCxzg0BC6oJiGdg7kfmjBDJw2BaKSFW8mgFkbwC5QaRvMWew8HnEHidnoeCl1%2FnAS%2BITaJ1gxzEKDAmIZxX8A4UM%3D\"}]}",
+        "content-encoding": "gzip",
+        "cf-ray": "984b9d87fa80210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 200
+    }
+  }
+]

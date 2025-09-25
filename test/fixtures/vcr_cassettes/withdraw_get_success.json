@@ -1,0 +1,36 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "",
+      "url": "https://api.abacatepay.com/v1/withdraw/get?id=test-withdraw-id",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "get",
+      "request_body": ""
+    },
+    "response": {
+      "binary": false,
+      "type": "ok",
+      "body": "{\"error\":\"querystring must have required property 'externalId'\",\"statusCode\":400}",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:39:38 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "81",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=k4Yn%2BrfAYupgXN87sDVgwijGTPcUqM3PZ8n6Yrqvob9Rv8TT2OXCYMvCzh3nwjEusZRWcSCyydtkbOlwZHa5CTnRYJKg%2BnDFg5otN3xSUfw%3D\"}]}",
+        "cf-ray": "984b9d8e7d4c210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 400
+    }
+  }
+]

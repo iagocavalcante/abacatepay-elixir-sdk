@@ -18,5 +18,17 @@ defmodule AbacatepayElixirSdk.CustomerClient do
     end
   end
 
-  # Functions for listing and creating customers will go here
+  @doc """
+  List all customers.
+  """
+  def list do
+    case HttpClient.request(:get, "/customer/list") do
+      {:ok, %{status: 200, body: %{"data" => data}}} ->
+        {:ok, data}
+      {:ok, %{body: %{"error" => error}}} ->
+        {:error, error}
+      {:error, error} ->
+        {:error, error.reason}
+    end
+  end
 end

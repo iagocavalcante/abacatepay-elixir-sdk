@@ -1,0 +1,36 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "{\"description\":\"Test billing\",\"amount\":1000}",
+      "url": "https://api.abacatepay.com/v1/billing/create",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "post",
+      "request_body": ""
+    },
+    "response": {
+      "binary": false,
+      "type": "ok",
+      "body": "{\"error\":\"body must have required property 'frequency'\",\"statusCode\":400}",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:44:52 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "73",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=dVNof7bM76Lnwxwyp4JiHSwD%2F%2FPC9GQ7yqjjVuzbC5mYPd9%2FQOGGUUpY0KNRtoU6N74SYWhaSOH0XgsoVUzRtcxMN8rzFJZvRgxLXjD8914%3D\"}]}",
+        "cf-ray": "984ba539cfff210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 400
+    }
+  }
+]

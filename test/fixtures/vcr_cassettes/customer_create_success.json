@@ -1,0 +1,39 @@
+[
+  {
+    "request": {
+      "options": [],
+      "body": "{\"name\":\"João Silva\",\"email\":\"joao@example.com\",\"cellphone\":\"11999999999\",\"taxId\":\"12345678901\"}",
+      "url": "https://api.abacatepay.com/v1/customer/create",
+      "headers": {
+        "accept": "application/json",
+        "accept-encoding": "gzip",
+        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "content-type": "application/json",
+        "user-agent": "Abacatepay-Elixir/0.1.0"
+      },
+      "method": "post",
+      "request_body": ""
+    },
+    "response": {
+      "binary": false,
+      "type": "ok",
+      "body": "{\"error\":\"Invalid taxId\"}",
+      "headers": {
+        "date": "Thu, 25 Sep 2025 15:39:37 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "25",
+        "connection": "keep-alive",
+        "server": "cloudflare",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
+        "access-control-allow-headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+        "access-control-allow-origin": "*",
+        "cf-cache-status": "DYNAMIC",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=nT0WzJW%2FQZVVxKlF6%2BwPUJCiEakEEdaQmxUf5XRLnG%2Fd1TdLdssqRy%2BQLmZCid0N5kO4YdEAkXqaAvBR2ucr%2FcpxPl0brxXkeaslP%2F2zGgs%3D\"}]}",
+        "cf-ray": "984b9d870fd5210d-GIG",
+        "alt-svc": "h3=\":443\"; ma=86400"
+      },
+      "status_code": 400
+    }
+  }
+]
