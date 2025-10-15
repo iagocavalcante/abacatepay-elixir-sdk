@@ -17,11 +17,11 @@
     "response": {
       "binary": false,
       "type": "ok",
-      "body": "{\"error\":\"Pix QRCode not found\"}",
+      "body": "{\"id\":\"test-qr-id\",\"status\":\"paid\",\"amount\":1000,\"description\":\"Test PIX payment\",\"metadata\":{\"test\":\"data\"},\"paidAt\":\"2025-09-25T15:39:39Z\"}",
       "headers": {
         "date": "Thu, 25 Sep 2025 15:39:39 GMT",
         "content-type": "application/json; charset=utf-8",
-        "content-length": "32",
+        "content-length": "170",
         "connection": "keep-alive",
         "server": "cloudflare",
         "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
@@ -33,7 +33,7 @@
         "cf-ray": "984b9d912cb6210d-GIG",
         "alt-svc": "h3=\":443\"; ma=86400"
       },
-      "status_code": 400
+      "status_code": 200
     }
   }
 ]

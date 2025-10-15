@@ -11,6 +11,8 @@ defmodule AbacatepayElixirSdk.CustomerClient do
     case HttpClient.request(:post, "/customer/create", body: Jason.encode!(params)) do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
+      {:ok, %{status: 200, body: body}} when is_map(body) ->
+        {:ok, body}
       {:ok, %{body: %{"error" => error}}} ->
         {:error, error}
       {:error, error} ->

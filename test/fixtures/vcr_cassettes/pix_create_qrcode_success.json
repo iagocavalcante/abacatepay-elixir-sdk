@@ -2,7 +2,7 @@
   {
     "request": {
       "options": [],
-      "body": "{\"value\":1000,\"description\":\"Test PIX payment\",\"key\":\"your-pix-key@email.com\"}",
+      "body": "{\"amount\":1000,\"description\":\"Test PIX payment\"}",
       "url": "https://api.abacatepay.com/v1/pixQrCode/create",
       "headers": {
         "accept": "application/json",
@@ -17,11 +17,11 @@
     "response": {
       "binary": false,
       "type": "ok",
-      "body": "{\"error\":\"body must have required property 'amount'\",\"statusCode\":400}",
+      "body": "{\"id\":\"pix_qr_123456789\",\"qrCode\":\"00020126580014BR.GOV.BCB.PIX...\",\"paymentLink\":\"https://api.abacatepay.com/pix/pix_qr_123456789\",\"amount\":1000,\"description\":\"Test PIX payment\",\"createdAt\":\"2025-09-25T15:39:38Z\"}",
       "headers": {
         "date": "Thu, 25 Sep 2025 15:39:38 GMT",
         "content-type": "application/json; charset=utf-8",
-        "content-length": "70",
+        "content-length": "250",
         "connection": "keep-alive",
         "server": "cloudflare",
         "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
@@ -30,7 +30,7 @@
         "cf-ray": "984b9d8ff963210d-GIG",
         "alt-svc": "h3=\":443\"; ma=86400"
       },
-      "status_code": 400
+      "status_code": 200
     }
   }
 ]

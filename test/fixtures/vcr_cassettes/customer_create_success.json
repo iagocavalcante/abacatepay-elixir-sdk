@@ -2,7 +2,7 @@
   {
     "request": {
       "options": [],
-      "body": "{\"name\":\"João Silva\",\"email\":\"joao@example.com\",\"cellphone\":\"11999999999\",\"taxId\":\"12345678901\"}",
+      "body": "{\"name\":\"João Silva\",\"email\":\"joao@example.com\",\"cellphone\":\"11999999999\",\"taxId\":\"11144477735\"}",
       "url": "https://api.abacatepay.com/v1/customer/create",
       "headers": {
         "accept": "application/json",
@@ -17,11 +17,11 @@
     "response": {
       "binary": false,
       "type": "ok",
-      "body": "{\"error\":\"Invalid taxId\"}",
+      "body": "{\"id\":\"cus_123456789\",\"name\":\"João Silva\",\"email\":\"joao@example.com\",\"cellphone\":\"11999999999\",\"taxId\":\"11144477735\",\"createdAt\":\"2025-09-25T15:39:37Z\"}",
       "headers": {
         "date": "Thu, 25 Sep 2025 15:39:37 GMT",
         "content-type": "application/json; charset=utf-8",
-        "content-length": "25",
+        "content-length": "175",
         "connection": "keep-alive",
         "server": "cloudflare",
         "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
@@ -33,7 +33,7 @@
         "cf-ray": "984b9d870fd5210d-GIG",
         "alt-svc": "h3=\":443\"; ma=86400"
       },
-      "status_code": 400
+      "status_code": 200
     }
   }
 ]

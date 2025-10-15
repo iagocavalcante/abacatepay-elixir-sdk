@@ -11,6 +11,8 @@ defmodule AbacatepayElixirSdk.PixClient do
     case HttpClient.request(:post, "/pixQrCode/create", body: Jason.encode!(params)) do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
+      {:ok, %{status: 200, body: body}} when is_map(body) ->
+        {:ok, body}
       {:ok, %{body: %{"error" => error}}} ->
         {:error, error}
       {:error, error} ->
@@ -26,6 +28,8 @@ defmodule AbacatepayElixirSdk.PixClient do
     case HttpClient.request(:post, path, body: Jason.encode!(%{"metadata" => metadata})) do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
+      {:ok, %{status: 200, body: body}} when is_map(body) ->
+        {:ok, body}
       {:ok, %{body: %{"error" => error}}} ->
         {:error, error}
       {:error, error} ->
@@ -41,6 +45,8 @@ defmodule AbacatepayElixirSdk.PixClient do
     case HttpClient.request(:get, path) do
       {:ok, %{status: 200, body: %{"data" => data}}} ->
         {:ok, data}
+      {:ok, %{status: 200, body: body}} when is_map(body) ->
+        {:ok, body}
       {:ok, %{body: %{"error" => error}}} ->
         {:error, error}
       {:error, error} ->

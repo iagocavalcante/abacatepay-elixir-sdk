@@ -4,6 +4,10 @@ defmodule AbacatepayElixirSdk.Billing do
   """
   @derive Jason.Encoder
   defstruct [
+    :id,
+    :url,
+    :amount,
+    :description,
     :frequency,
     :methods,
     :products,
