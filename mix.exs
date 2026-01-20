@@ -45,7 +45,7 @@ defmodule AbacatepayElixirSdk.MixProject do
       {:jason, "~> 1.4"},
       {:excoveralls, "~> 0.18", only: :test},
       {:exvcr, "~> 0.15", only: :test},
-      {:ex_doc, "~> 0.34", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.40", only: :dev, runtime: false}
     ]
   end
 
