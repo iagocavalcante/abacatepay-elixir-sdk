@@ -4,16 +4,17 @@
 [![Documentation](https://img.shields.io/badge/docs-hexdocs-blue)](https://hexdocs.pm/abacatepay_elixir_sdk)
 [![License](https://img.shields.io/hexpm/l/abacatepay_elixir_sdk)](https://github.com/iagocavalcante/abacatepay-elixir-sdk/blob/main/LICENSE)
 
-The official Elixir SDK for [AbacatePay](https://abacatepay.com/) - Brazil's modern payment platform. Build secure, fast payment integrations with PIX, cards, and billing management.
+The official Elixir SDK for [AbacatePay](https://abacatepay.com/) - Brazil's modern payment platform. Build secure, fast payment integrations with PIX, billing, and MRR metrics.
 
 ## Features
 
-- 🏦 **Complete API Coverage** - All AbacatePay endpoints supported
-- 🔒 **Production Ready** - Robust error handling and security
-- 📊 **Comprehensive Testing** - 100% API coverage with VCR cassettes
-- 🚀 **Modern Elixir** - Built with Req, Jason, and OTP best practices
-- 📖 **Full Documentation** - Complete guides and API reference
-- 🐛 **Developer Friendly** - Detailed error messages and debugging support
+- **Complete API Coverage** - All AbacatePay endpoints supported
+- **Type-Safe Responses** - All API responses return typed structs
+- **Structured Error Handling** - Rich error types with HTTP status codes
+- **Production Ready** - Robust error handling and security
+- **Comprehensive Testing** - 100% API coverage with VCR cassettes
+- **Modern Elixir** - Built with Req, Jason, and OTP best practices
+- **Full Documentation** - Complete guides and API reference
 
 ## Installation
 
@@ -69,6 +70,8 @@ end
 ```elixir
 # Create a simple PIX payment
 alias AbacatepayElixirSdk.PixClient
+alias AbacatepayElixirSdk.Pix
+alias AbacatepayElixirSdk.Error
 
 params = %{
   amount: 1999,  # R$ 19.99 in cents
@@ -76,13 +79,14 @@ params = %{
 }
 
 case PixClient.create_qrcode(params) do
-  {:ok, qr_data} ->
-    # qr_data contains: id, qrCode, paymentLink
-    IO.puts("PIX Code: #{qr_data["qrCode"]}")
-    IO.puts("Payment Link: #{qr_data["paymentLink"]}")
+  {:ok, %Pix{} = pix} ->
+    IO.puts("PIX ID: #{pix.id}")
+    IO.puts("BR Code: #{pix.br_code}")
+    IO.puts("Status: #{pix.status}")
 
-  {:error, reason} ->
-    IO.puts("Error: #{reason}")
+  {:error, %Error{} = error} ->
+    IO.puts("Error: #{error.message}")
+    IO.puts("Status: #{error.status}")
 end
 ```
 
@@ -92,34 +96,42 @@ end
 
 ```elixir
 alias AbacatepayElixirSdk.StoreClient
+alias AbacatepayElixirSdk.Store
 
 # Get store details and balance
-{:ok, store} = StoreClient.get()
-# Returns: %{"id" => "...", "name" => "...", "balance" => %{...}}
+{:ok, %Store{} = store} = StoreClient.get()
+IO.puts("Store: #{store.name}")
+IO.puts("Balance: #{store.balance}")
 ```
 
 ### Billing Operations
 
 ```elixir
 alias AbacatepayElixirSdk.BillingClient
+alias AbacatepayElixirSdk.Billing
 
 # Create a billing/invoice
 params = %{
   amount: 2999,  # R$ 29.99 in cents
   description: "Monthly Subscription",
-  frequency: "oneTime"  # or "monthly", "yearly"
+  frequency: "ONE_TIME",  # or "MONTHLY", "YEARLY"
+  methods: ["PIX"]
 }
 
-{:ok, billing} = BillingClient.create(params)
+{:ok, %Billing{} = billing} = BillingClient.create(params)
+IO.puts("Billing ID: #{billing.id}")
+IO.puts("Payment URL: #{billing.url}")
 
 # List all billings
 {:ok, billings} = BillingClient.list()
+Enum.each(billings, fn %Billing{} = b -> IO.puts(b.id) end)
 ```
 
 ### Customer Management
 
 ```elixir
 alias AbacatepayElixirSdk.CustomerClient
+alias AbacatepayElixirSdk.Customer
 
 # Create a customer
 customer_params = %{
@@ -129,7 +141,8 @@ customer_params = %{
   taxId: "11144477735"  # Valid CPF
 }
 
-{:ok, customer} = CustomerClient.create(customer_params)
+{:ok, %Customer{} = customer} = CustomerClient.create(customer_params)
+IO.puts("Customer ID: #{customer.id}")
 
 # List all customers
 {:ok, customers} = CustomerClient.list()
@@ -139,6 +152,7 @@ customer_params = %{
 
 ```elixir
 alias AbacatepayElixirSdk.PixClient
+alias AbacatepayElixirSdk.Pix
 
 # Create PIX QR Code
 pix_params = %{
@@ -146,19 +160,22 @@ pix_params = %{
   description: "Product Purchase"
 }
 
-{:ok, qr_data} = PixClient.create_qrcode(pix_params)
+{:ok, %Pix{} = pix} = PixClient.create_qrcode(pix_params)
+IO.puts("PIX BR Code: #{pix.br_code}")
 
 # Check payment status
-{:ok, status} = PixClient.check_status(qr_data["id"])
+{:ok, %Pix{status: status}} = PixClient.check_status(pix.id)
+IO.puts("Payment status: #{status}")
 
 # Simulate payment (development mode only)
-{:ok, payment} = PixClient.simulate_payment(qr_data["id"], %{test: "data"})
+{:ok, %Pix{status: "PAID"}} = PixClient.simulate_payment(pix.id)
 ```
 
 ### Coupon Management
 
 ```elixir
 alias AbacatepayElixirSdk.CouponClient
+alias AbacatepayElixirSdk.Coupon
 
 # Create a discount coupon
 coupon_params = %{
@@ -170,10 +187,12 @@ coupon_params = %{
   notes: "20% off for new customers"
 }
 
-{:ok, coupon} = CouponClient.create(coupon_params)
+{:ok, %Coupon{} = coupon} = CouponClient.create(coupon_params)
+IO.puts("Coupon code: #{coupon.code}")
 
 # List all coupons
 {:ok, coupons} = CouponClient.list()
+active = Enum.filter(coupons, & &1.active)
 ```
 
 ### Withdrawal Operations
@@ -182,51 +201,108 @@ coupon_params = %{
 
 ```elixir
 alias AbacatepayElixirSdk.WithdrawClient
+alias AbacatepayElixirSdk.Withdraw
 
 # Create withdrawal
 withdraw_params = %{
   amount: 10000,  # R$ 100.00
-  externalId: "withdraw-001",
-  bankAccount: %{
-    bank: "001",
-    agency: "1234",
-    account: "12345678",
-    accountType: "checking"
-  }
+  pix_key: "email@example.com",
+  pix_key_type: "EMAIL",
+  external_id: "withdraw-001"
 }
 
-{:ok, withdraw} = WithdrawClient.create(withdraw_params)
+{:ok, %Withdraw{} = withdraw} = WithdrawClient.create(withdraw_params)
 
 # Get withdrawal by external ID
-{:ok, withdraw} = WithdrawClient.get("withdraw-001")
+{:ok, %Withdraw{} = withdraw} = WithdrawClient.get("withdraw-001")
+IO.puts("Withdrawal status: #{withdraw.status}")
 
 # List all withdrawals
 {:ok, withdrawals} = WithdrawClient.list()
 ```
 
-## Error Handling
+### Public MRR Metrics
 
-The SDK provides structured error handling:
+The Trust MRR Integration allows you to share revenue metrics transparently with stakeholders.
 
 ```elixir
-case BillingClient.create(invalid_params) do
-  {:ok, billing} ->
-    # Success case
+alias AbacatepayElixirSdk.PublicMrrClient
+alias AbacatepayElixirSdk.{Mrr, MerchantInfo, Revenue}
+
+# Get Monthly Recurring Revenue
+{:ok, %Mrr{} = mrr} = PublicMrrClient.get_mrr()
+IO.puts("MRR: R$ #{mrr.mrr / 100}")
+IO.puts("Active subscriptions: #{mrr.active_subscriptions}")
+
+# Get merchant info
+{:ok, %MerchantInfo{} = info} = PublicMrrClient.get_merchant_info()
+IO.puts("Store: #{info.name}")
+IO.puts("Website: #{info.website}")
+
+# Get revenue for a period (cached for 1 hour)
+{:ok, %Revenue{} = revenue} = PublicMrrClient.get_revenue("2024-01-01", "2024-01-31")
+IO.puts("Total revenue: R$ #{revenue.total_revenue / 100}")
+IO.puts("Transactions: #{revenue.total_transactions}")
+```
+
+## Error Handling
+
+The SDK provides structured error handling with the `AbacatepayElixirSdk.Error` struct:
+
+```elixir
+alias AbacatepayElixirSdk.BillingClient
+alias AbacatepayElixirSdk.Billing
+alias AbacatepayElixirSdk.Error
+
+case BillingClient.create(params) do
+  {:ok, %Billing{} = billing} ->
+    # Success - billing is a typed struct
     process_billing(billing)
 
-  {:error, "body must have required property 'frequency'"} ->
+  {:error, %Error{status: 401}} ->
+    # Unauthorized - invalid API token
+    {:error, :unauthorized}
+
+  {:error, %Error{status: 400, message: message}} ->
     # Validation error from API
-    {:error, :invalid_frequency}
+    {:error, {:validation_error, message}}
 
-  {:error, %{reason: :timeout}} ->
-    # Network timeout
-    {:error, :network_timeout}
+  {:error, %Error{code: "NETWORK_ERROR", message: message}} ->
+    # Network/connection error
+    {:error, {:network_error, message}}
 
-  {:error, reason} ->
-    # Other errors
-    {:error, reason}
+  {:error, %Error{} = error} ->
+    # Other API errors
+    Logger.error("API error: #{error}")
+    {:error, error}
 end
 ```
+
+### Error Struct Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | `integer \| nil` | HTTP status code (400, 401, 404, 500, etc.) |
+| `code` | `string \| nil` | API error code (e.g., "INVALID_PARAMS", "NETWORK_ERROR") |
+| `message` | `string` | Human-readable error message |
+| `details` | `map \| nil` | Additional error details |
+
+## Data Structures
+
+All API responses are returned as typed structs:
+
+| Struct | Description |
+|--------|-------------|
+| `Billing` | Billing/invoice with URL, amount, status |
+| `Billing.Product` | Product line item in a billing |
+| `Customer` | Customer with name, email, tax_id |
+| `Pix` | PIX QR code with br_code, status, amount |
+| `Coupon` | Discount coupon with code, discount, uses |
+| `Store` | Store info with balance details |
+| `Withdraw` | Withdrawal with pix_key, status |
+| `Mrr` | Monthly recurring revenue metrics |
+| `MerchantInfo` | Merchant name, website, creation date |
+| `Revenue` | Revenue metrics for a period |
 
 ## Testing
 
@@ -237,7 +313,7 @@ The SDK includes comprehensive tests with VCR cassettes for reliable testing:
 mix test
 
 # Run tests with coverage
-mix test --cover
+mix coveralls
 
 # Run specific test file
 mix test test/abacatepay_elixir_sdk/billing_client_test.exs
@@ -250,10 +326,14 @@ mix test test/abacatepay_elixir_sdk/billing_client_test.exs
 use ExUnit.Case
 use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
+alias AbacatepayElixirSdk.BillingClient
+alias AbacatepayElixirSdk.Billing
+
 test "creates billing successfully" do
   use_cassette "billing_create_success" do
-    params = %{amount: 1000, description: "Test", frequency: "oneTime"}
-    assert {:ok, billing} = BillingClient.create(params)
+    params = %{amount: 1000, description: "Test", frequency: "ONE_TIME", methods: ["PIX"]}
+    assert {:ok, %Billing{} = billing} = BillingClient.create(params)
+    assert is_binary(billing.id)
   end
 end
 ```
@@ -263,14 +343,14 @@ end
 ### Sandbox (Development)
 - All endpoints available except withdrawals
 - Use test API tokens starting with `abc_dev_`
-- Payment simulation available
+- Payment simulation available via `PixClient.simulate_payment/2`
 - Safe for development and testing
 
 ### Production
 - All endpoints available including withdrawals
 - Use production API tokens starting with `abc_live_`
 - Real payment processing
-- Requires PCI compliance for card operations
+- MRR metrics available with real data
 
 ## Rate Limiting & Best Practices
 
@@ -282,13 +362,21 @@ end
 ```elixir
 # Example with retry logic
 defmodule PaymentService do
+  alias AbacatepayElixirSdk.BillingClient
+  alias AbacatepayElixirSdk.Billing
+  alias AbacatepayElixirSdk.Error
+
   def create_billing_with_retry(params, retries \\ 3) do
     case BillingClient.create(params) do
-      {:ok, billing} -> {:ok, billing}
-      {:error, reason} when retries > 0 ->
-        Process.sleep(1000)
+      {:ok, %Billing{} = billing} ->
+        {:ok, billing}
+
+      {:error, %Error{code: "NETWORK_ERROR"}} when retries > 0 ->
+        Process.sleep(1000 * (4 - retries))  # Exponential backoff
         create_billing_with_retry(params, retries - 1)
-      error -> error
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 end
@@ -296,18 +384,18 @@ end
 
 ## Security
 
-- ✅ **API Keys**: Never commit API keys to version control
-- ✅ **Environment Variables**: Use secure environment management
-- ✅ **HTTPS Only**: All API calls use HTTPS encryption
-- ✅ **Request Signing**: Built-in request authentication
-- ✅ **Data Filtering**: Sensitive data excluded from logs
+- **API Keys**: Never commit API keys to version control
+- **Environment Variables**: Use secure environment management
+- **HTTPS Only**: All API calls use HTTPS encryption
+- **Request Signing**: Built-in request authentication
+- **Data Filtering**: Sensitive data excluded from VCR cassettes
 
 ## Support & Resources
 
-- 📖 **[API Documentation](https://docs.abacatepay.com/)** - Complete API reference
-- 💬 **[Discord Community](https://discord.gg/abacatepay)** - Developer support
-- 🐛 **[Issue Tracker](https://github.com/iagocavalcante/abacatepay-elixir-sdk/issues)** - Bug reports
-- 📧 **[Email Support](mailto:dev@abacatepay.com)** - Technical questions
+- **[API Documentation](https://docs.abacatepay.com/)** - Complete API reference
+- **[Discord Community](https://discord.gg/abacatepay)** - Developer support
+- **[Issue Tracker](https://github.com/iagocavalcante/abacatepay-elixir-sdk/issues)** - Bug reports
+- **[Email Support](mailto:dev@abacatepay.com)** - Technical questions
 
 ## Contributing
 
@@ -330,8 +418,8 @@ This SDK is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 ---
 
 <div align="center">
-  <strong>Built with ❤️ for the Elixir community</strong><br>
-  <a href="https://abacatepay.com">AbacatePay</a> •
-  <a href="https://docs.abacatepay.com">Documentation</a> •
+  <strong>Built with love for the Elixir community</strong><br>
+  <a href="https://abacatepay.com">AbacatePay</a> |
+  <a href="https://docs.abacatepay.com">Documentation</a> |
   <a href="https://github.com/iagocavalcante/abacatepay-elixir-sdk">GitHub</a>
 </div>

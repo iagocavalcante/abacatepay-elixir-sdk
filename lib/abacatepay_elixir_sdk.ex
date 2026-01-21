@@ -9,6 +9,7 @@ defmodule AbacatepayElixirSdk do
   - Manage discount coupons
   - Process withdrawals (production only)
   - Access store information and balance
+  - Retrieve MRR metrics and revenue data (Trust MRR Integration)
 
   ## Quick Start
 
@@ -19,6 +20,7 @@ defmodule AbacatepayElixirSdk do
 
       # Create a PIX payment
       alias AbacatepayElixirSdk.PixClient
+      alias AbacatepayElixirSdk.Pix
 
       params = %{
         amount: 1999,  # R$ 19.99 in cents
@@ -26,10 +28,10 @@ defmodule AbacatepayElixirSdk do
       }
 
       case PixClient.create_qrcode(params) do
-        {:ok, qr_data} ->
-          IO.puts("PIX Code: \#{qr_data["qrCode"]}")
-        {:error, reason} ->
-          IO.puts("Error: \#{reason}")
+        {:ok, %Pix{} = pix} ->
+          IO.puts("PIX Code: \#{pix.br_code}")
+        {:error, %AbacatepayElixirSdk.Error{} = error} ->
+          IO.puts("Error: \#{error.message}")
       end
 
   ## Configuration
@@ -55,16 +57,23 @@ defmodule AbacatepayElixirSdk do
   - `AbacatepayElixirSdk.CouponClient` - Coupon and discount management
   - `AbacatepayElixirSdk.WithdrawClient` - Withdrawal operations (production only)
   - `AbacatepayElixirSdk.StoreClient` - Store information and balance
+  - `AbacatepayElixirSdk.PublicMrrClient` - MRR metrics and revenue data
 
   ## Error Handling
 
-  All client functions return either `{:ok, data}` or `{:error, reason}` tuples:
+  All client functions return either `{:ok, struct}` or `{:error, %Error{}}` tuples:
+
+      alias AbacatepayElixirSdk.BillingClient
+      alias AbacatepayElixirSdk.Billing
+      alias AbacatepayElixirSdk.Error
 
       case BillingClient.create(params) do
-        {:ok, billing} -> 
-          # Handle success
-        {:error, reason} -> 
-          # Handle error
+        {:ok, %Billing{} = billing} ->
+          IO.puts("Created billing: \#{billing.id}")
+        {:error, %Error{status: 401}} ->
+          IO.puts("Unauthorized - check your API token")
+        {:error, %Error{} = error} ->
+          IO.puts("Error: \#{error.message}")
       end
 
   ## Testing
