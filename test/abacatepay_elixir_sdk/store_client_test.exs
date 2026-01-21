@@ -3,6 +3,7 @@ defmodule AbacatepayElixirSdk.StoreClientTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
   alias AbacatepayElixirSdk.StoreClient
+  alias AbacatepayElixirSdk.Store
 
   setup_all do
     ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
@@ -12,9 +13,9 @@ defmodule AbacatepayElixirSdk.StoreClientTest do
   describe "get/0" do
     test "gets store details successfully" do
       use_cassette "store_get_success" do
-        assert {:ok, store} = StoreClient.get()
-        assert Map.has_key?(store, "id")
-        assert Map.has_key?(store, "name")
+        assert {:ok, %Store{} = store} = StoreClient.get()
+        assert is_binary(store.id)
+        assert is_binary(store.name)
       end
     end
   end

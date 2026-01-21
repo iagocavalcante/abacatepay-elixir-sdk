@@ -3,6 +3,7 @@ defmodule AbacatepayElixirSdk.CustomerClientTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
   alias AbacatepayElixirSdk.CustomerClient
+  alias AbacatepayElixirSdk.Customer
 
   setup_all do
     ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
@@ -19,10 +20,10 @@ defmodule AbacatepayElixirSdk.CustomerClientTest do
           taxId: "11144477735"
         }
 
-        assert {:ok, customer} = CustomerClient.create(params)
-        assert is_binary(customer["id"])
-        assert customer["name"] == "João Silva"
-        assert customer["email"] == "joao@example.com"
+        assert {:ok, %Customer{} = customer} = CustomerClient.create(params)
+        assert is_binary(customer.id)
+        assert customer.name == "João Silva"
+        assert customer.email == "joao@example.com"
       end
     end
 

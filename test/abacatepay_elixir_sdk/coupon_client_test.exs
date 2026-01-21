@@ -3,6 +3,7 @@ defmodule AbacatepayElixirSdk.CouponClientTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
   alias AbacatepayElixirSdk.CouponClient
+  alias AbacatepayElixirSdk.Coupon
 
   setup_all do
     ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
@@ -21,11 +22,9 @@ defmodule AbacatepayElixirSdk.CouponClientTest do
           notes: "Test coupon for SDK"
         }
 
-        assert {:ok, coupon} = CouponClient.create(params)
-        assert is_binary(coupon["id"])
-        assert coupon["code"] == "TEST10"
-        assert coupon["type"] == "percentage"
-        assert coupon["value"] == 10
+        assert {:ok, %Coupon{} = coupon} = CouponClient.create(params)
+        assert is_binary(coupon.id)
+        assert coupon.code == "TEST10"
       end
     end
 

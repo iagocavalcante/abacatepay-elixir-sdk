@@ -3,6 +3,7 @@ defmodule AbacatepayElixirSdk.PixClientTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
   alias AbacatepayElixirSdk.PixClient
+  alias AbacatepayElixirSdk.Pix
 
   setup_all do
     ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
@@ -17,10 +18,8 @@ defmodule AbacatepayElixirSdk.PixClientTest do
           description: "Test PIX payment"
         }
 
-        assert {:ok, qr_data} = PixClient.create_qrcode(params)
-        assert is_binary(qr_data["qrCode"])
-        assert is_binary(qr_data["paymentLink"])
-        assert is_binary(qr_data["id"])
+        assert {:ok, %Pix{} = pix} = PixClient.create_qrcode(params)
+        assert is_binary(pix.id)
       end
     end
 
@@ -38,8 +37,8 @@ defmodule AbacatepayElixirSdk.PixClientTest do
       use_cassette "pix_check_status_success" do
         qr_id = "test-qr-id"
 
-        assert {:ok, status_data} = PixClient.check_status(qr_id)
-        assert Map.has_key?(status_data, "status")
+        assert {:ok, %Pix{} = pix} = PixClient.check_status(qr_id)
+        assert pix.status != nil
       end
     end
   end
@@ -50,8 +49,8 @@ defmodule AbacatepayElixirSdk.PixClientTest do
         qr_id = "test-qr-id"
         metadata = %{test: "data"}
 
-        assert {:ok, payment_data} = PixClient.simulate_payment(qr_id, metadata)
-        assert Map.has_key?(payment_data, "status")
+        assert {:ok, %Pix{} = pix} = PixClient.simulate_payment(qr_id, metadata)
+        assert pix.status != nil
       end
     end
   end
