@@ -1,7 +1,7 @@
 defmodule AbacatepayElixirSdk.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
   @source_url "https://github.com/iagocavalcante/abacatepay-elixir-sdk"
 
   def project do
@@ -16,8 +16,13 @@ defmodule AbacatepayElixirSdk.MixProject do
       docs: docs(),
       source_url: @source_url,
       homepage_url: "https://abacatepay.com",
-      test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      test_coverage: [tool: ExCoveralls]
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
@@ -87,14 +92,26 @@ defmodule AbacatepayElixirSdk.MixProject do
           AbacatepayElixirSdk.PixClient,
           AbacatepayElixirSdk.CouponClient,
           AbacatepayElixirSdk.WithdrawClient,
-          AbacatepayElixirSdk.StoreClient
+          AbacatepayElixirSdk.StoreClient,
+          AbacatepayElixirSdk.PublicMrrClient
         ],
         "HTTP & Core": [
+          AbacatepayElixirSdk,
           AbacatepayElixirSdk.HttpClient,
-          AbacatepayElixirSdk
+          AbacatepayElixirSdk.Response,
+          AbacatepayElixirSdk.Error
         ],
         "Data Structures": [
-          AbacatepayElixirSdk.Billing
+          AbacatepayElixirSdk.Billing,
+          AbacatepayElixirSdk.Billing.Product,
+          AbacatepayElixirSdk.Customer,
+          AbacatepayElixirSdk.Pix,
+          AbacatepayElixirSdk.Coupon,
+          AbacatepayElixirSdk.Store,
+          AbacatepayElixirSdk.Withdraw,
+          AbacatepayElixirSdk.Mrr,
+          AbacatepayElixirSdk.MerchantInfo,
+          AbacatepayElixirSdk.Revenue
         ]
       ]
     ]
