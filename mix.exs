@@ -41,7 +41,7 @@ defmodule AbacatepayElixirSdk.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:req, "~> 0.5.10"},
+      {:req, "~> 0.7.0"},
       {:jason, "~> 1.4"},
       {:excoveralls, "~> 0.18", only: :test},
       {:exvcr, "~> 0.15", only: :test},
