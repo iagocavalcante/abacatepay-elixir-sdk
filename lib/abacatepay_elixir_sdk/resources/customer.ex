@@ -2,7 +2,9 @@ defmodule AbacatepayElixirSdk.Customer do
   @moduledoc """
   Customer resource struct.
 
-  Represents a customer in the AbacatePay system.
+  API v1 commonly returns the contact fields inside `metadata`. For that shape,
+  read the email from `customer.metadata["email"]`. The top-level fields are
+  populated when the response includes them at the top level.
 
   ## Fields
 

@@ -2,7 +2,7 @@ defmodule AbacatepayElixirSdk.WithdrawClientTest do
   use ExUnit.Case
   use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
-  alias AbacatepayElixirSdk.WithdrawClient
+  alias AbacatepayElixirSdk.{Error, WithdrawClient}
 
   setup_all do
     ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
@@ -34,7 +34,7 @@ defmodule AbacatepayElixirSdk.WithdrawClientTest do
       use_cassette "withdraw_create_error" do
         params = %{invalid: "data"}
 
-        assert {:error, _error} = WithdrawClient.create(params)
+        assert {:error, %Error{status: 400}} = WithdrawClient.create(params)
       end
     end
   end

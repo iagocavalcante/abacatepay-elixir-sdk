@@ -11,16 +11,17 @@ defmodule AbacatepayElixirSdk.Error do
     * `:message` - Human-readable error message
     * `:details` - Additional error details (optional)
 
-  ## Examples
+  For v2 calls, `MISSING_TOKEN` indicates a missing credential and `NETWORK_ERROR`
+  indicates a transport failure. In both cases, `status` is `nil`.
 
-      case PixClient.create_qrcode(params) do
-        {:ok, pix} -> # success
-        {:error, %AbacatepayElixirSdk.Error{status: 401}} ->
-          # Handle unauthorized
-        {:error, %AbacatepayElixirSdk.Error{code: "INVALID_PARAMS", message: msg}} ->
-          # Handle validation error with message
-        {:error, %AbacatepayElixirSdk.Error{} = error} ->
-          Logger.error("API error: \#{error}")
+  ## Example
+
+      alias AbacatepayElixirSdk.{Error, V2.Stores}
+
+      case Stores.get() do
+        {:ok, %{"data" => store}} -> {:ok, store}
+        {:error, %Error{status: 401, message: message}} -> {:error, {:authorization, message}}
+        {:error, %Error{} = error} -> {:error, error}
       end
   """
 
@@ -36,13 +37,19 @@ defmodule AbacatepayElixirSdk.Error do
   @doc """
   Creates an error from an API response body.
   """
-  def from_response(body, status \\ nil) when is_map(body) do
+  def from_response(body, status \\ nil)
+
+  def from_response(body, status) when is_map(body) do
     %__MODULE__{
       status: status,
       code: body["code"] || body["error_code"],
       message: extract_message(body),
       details: body["details"] || body["errors"]
     }
+  end
+
+  def from_response(_body, status) do
+    %__MODULE__{status: status, message: "Unexpected response from AbacatePay"}
   end
 
   @doc """

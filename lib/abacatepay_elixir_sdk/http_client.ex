@@ -1,6 +1,6 @@
 defmodule AbacatepayElixirSdk.HttpClient do
   @moduledoc """
-  HTTP client for AbacatePay API using Req.
+  Shared HTTP transport for AbacatePay. Direct requests default to API v1.
 
   Automatically sets base URL, Authorization header, and handles
   request/response processing.
@@ -13,8 +13,8 @@ defmodule AbacatepayElixirSdk.HttpClient do
       # GET with query params
       HttpClient.request(:get, "/pixQrCode/check", params: [id: "abc123"])
 
-      # POST with JSON body
-      HttpClient.request(:post, "/billing/create", json: %{amount: 1000})
+      # GET a v1 withdrawal by external ID
+      HttpClient.request(:get, "/withdraw/get", params: [externalId: "withdraw-123"])
   """
 
   @production_url "https://api.abacatepay.com/v1"
@@ -24,11 +24,7 @@ defmodule AbacatepayElixirSdk.HttpClient do
   """
   @spec base_url() :: String.t()
   def base_url do
-    Application.get_env(:abacatepay_elixir_sdk, :base_url) ||
-      case AbacatepayElixirSdk.environment() do
-        :production -> @production_url
-        _ -> @production_url
-      end
+    Application.get_env(:abacatepay_elixir_sdk, :base_url) || @production_url
   end
 
   @doc """
@@ -36,7 +32,10 @@ defmodule AbacatepayElixirSdk.HttpClient do
   """
   @spec default_headers(keyword()) :: [{String.t(), String.t()}]
   def default_headers(extra_headers \\ []) do
-    api_key = AbacatepayElixirSdk.api_token()
+    default_headers(extra_headers, AbacatepayElixirSdk.api_token())
+  end
+
+  defp default_headers(extra_headers, api_key) do
     version = Application.spec(:abacatepay_elixir_sdk, :vsn) || "dev"
 
     [
@@ -53,6 +52,8 @@ defmodule AbacatepayElixirSdk.HttpClient do
 
   ## Options
 
+    * `:base_url` - Server URL including the API version (defaults to the v1 URL)
+    * `:api_token` - Bearer credential for this request (defaults to the configured v1 credential)
     * `:params` - Query parameters as a keyword list or map (uses Req's built-in support)
     * `:json` - Request body as a map (automatically JSON encoded by Req)
     * `:body` - Raw request body (for backwards compatibility)
@@ -64,18 +65,20 @@ defmodule AbacatepayElixirSdk.HttpClient do
       HttpClient.request(:get, "/pixQrCode/check", params: [id: "abc123"])
 
       # POST with JSON body
-      HttpClient.request(:post, "/customer/create", json: %{name: "John", email: "john@example.com"})
+      HttpClient.request(:post, "/pixQrCode/create", json: %{amount: 1999})
   """
   @spec request(atom(), String.t(), keyword()) ::
           {:ok, Req.Response.t()} | {:error, Exception.t()}
   def request(method, path, opts \\ []) do
     {extra_headers, opts} = Keyword.pop(opts, :headers, [])
+    {url, opts} = Keyword.pop_lazy(opts, :base_url, &base_url/0)
+    {token, opts} = Keyword.pop_lazy(opts, :api_token, &AbacatepayElixirSdk.api_token/0)
 
     req_opts =
       [
         method: method,
-        url: base_url() <> path,
-        headers: default_headers(extra_headers)
+        url: String.trim_trailing(url, "/") <> path,
+        headers: default_headers(extra_headers, token)
       ] ++ opts
 
     Req.request(req_opts)

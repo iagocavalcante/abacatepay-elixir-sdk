@@ -2,7 +2,7 @@ defmodule AbacatepayElixirSdk.BillingClientTest do
   use ExUnit.Case
   use ExVCR.Mock, adapter: ExVCR.Adapter.Finch
 
-  alias AbacatepayElixirSdk.BillingClient
+  alias AbacatepayElixirSdk.{Billing, BillingClient}
 
   setup_all do
     ExVCR.Config.cassette_library_dir("test/fixtures/vcr_cassettes")
@@ -18,7 +18,7 @@ defmodule AbacatepayElixirSdk.BillingClientTest do
           frequency: "oneTime"
         }
 
-        assert {:ok, billing} = BillingClient.create(params)
+        assert {:ok, %Billing{} = billing} = BillingClient.create(params)
         assert is_binary(billing.id)
         assert billing.url != nil
       end

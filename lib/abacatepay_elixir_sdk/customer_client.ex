@@ -1,17 +1,6 @@
 defmodule AbacatepayElixirSdk.CustomerClient do
   @moduledoc """
-  Client for Customer operations.
-
-  Provides functions to create and list customers.
-
-  ## Examples
-
-      # Create a customer
-      params = %{name: "John Doe", email: "john@example.com", tax_id: "12345678901"}
-      {:ok, %Customer{} = customer} = CustomerClient.create(params)
-
-      # List all customers
-      {:ok, customers} = CustomerClient.list()
+  V1 customer records. For v2, see `AbacatepayElixirSdk.V2.Customers`.
   """
 
   alias AbacatepayElixirSdk.HttpClient
@@ -19,30 +8,16 @@ defmodule AbacatepayElixirSdk.CustomerClient do
   alias AbacatepayElixirSdk.Customer
 
   @doc """
-  Creates a new customer.
+  Create a v1 customer. All four fields are required.
 
-  ## Parameters
+      alias AbacatepayElixirSdk.CustomerClient
 
-    * `params` - Map with the following keys:
-      * `:name` (required) - Customer name
-      * `:email` (required) - Customer email
-      * `:tax_id` (optional) - Customer tax ID (CPF/CNPJ)
-      * `:cellphone` (optional) - Customer cellphone
-      * `:metadata` (optional) - Additional metadata
-
-  ## Returns
-
-    * `{:ok, %Customer{}}` - The created customer
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      params = %{
-        name: "John Doe",
-        email: "john@example.com",
-        tax_id: "12345678901"
-      }
-      {:ok, customer} = CustomerClient.create(params)
+      CustomerClient.create(%{
+        name: "Ana Silva",
+        email: "ana@example.com",
+        cellphone: "(11) 99999-1234",
+        taxId: "111.444.777-35"
+      })
   """
   @spec create(map()) :: {:ok, Customer.t()} | {:error, AbacatepayElixirSdk.Error.t()}
   def create(params) do
@@ -50,19 +25,7 @@ defmodule AbacatepayElixirSdk.CustomerClient do
     |> Response.parse(struct: Customer)
   end
 
-  @doc """
-  Lists all customers.
-
-  ## Returns
-
-    * `{:ok, [%Customer{}]}` - List of customers
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      {:ok, customers} = CustomerClient.list()
-      Enum.each(customers, fn c -> IO.puts(c.name) end)
-  """
+  @doc "List v1 customers as `AbacatepayElixirSdk.Customer` structs."
   @spec list() :: {:ok, [Customer.t()]} | {:error, AbacatepayElixirSdk.Error.t()}
   def list do
     HttpClient.request(:get, "/customer/list")

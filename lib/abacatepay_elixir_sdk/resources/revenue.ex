@@ -2,15 +2,14 @@ defmodule AbacatepayElixirSdk.Revenue do
   @moduledoc """
   Revenue metrics resource struct.
 
-  Represents revenue data for a specific period from the AbacatePay system.
+  The v1 client exposes `total_revenue` and `total_transactions`. For the API's
+  daily breakdown under `"transactionsPerDay"`, use `AbacatepayElixirSdk.V2.PublicMrr.revenue/2`.
 
   ## Fields
 
     * `:total_revenue` - Total revenue amount in cents for the period
     * `:total_transactions` - Total number of transactions in the period
-    * `:daily_breakdown` - List of daily transaction data
-    * `:start_date` - Start date of the period
-    * `:end_date` - End date of the period
+    * `:daily_breakdown`, `:start_date`, `:end_date` - Optional legacy fields
   """
 
   @type t :: %__MODULE__{

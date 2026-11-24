@@ -8,16 +8,15 @@ defmodule AbacatepayElixirSdk.Store do
 
     * `:id` - Unique store identifier
     * `:name` - Store name
-    * `:balance` - Current balance in cents
-    * `:pending_balance` - Pending balance in cents
-    * `:available_balance` - Available balance for withdrawal in cents
+    * `:balance` - The v1 balance map contains `"available"`, `"pending"` and `"blocked"` in centavos
+    * `:pending_balance`, `:available_balance` - Optional legacy fields from responses with top-level balances
     * `:created_at` - Creation timestamp
   """
 
   @type t :: %__MODULE__{
           id: String.t() | nil,
           name: String.t() | nil,
-          balance: integer() | nil,
+          balance: map() | integer() | nil,
           pending_balance: integer() | nil,
           available_balance: integer() | nil,
           created_at: String.t() | nil

@@ -7,7 +7,7 @@
       "headers": {
         "accept": "application/json",
         "accept-encoding": "gzip",
-        "authorization": "Bearer abc_dev_wbbQwnwFTZJa3F2epkCTQ4Sf",
+        "authorization": "Bearer ***",
         "content-type": "application/json",
         "user-agent": "Abacatepay-Elixir/0.1.0"
       },

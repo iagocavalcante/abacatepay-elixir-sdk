@@ -1,7 +1,7 @@
 defmodule AbacatepayElixirSdk.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @source_url "https://github.com/iagocavalcante/abacatepay-elixir-sdk"
 
   def project do
@@ -41,7 +41,7 @@ defmodule AbacatepayElixirSdk.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:req, "~> 0.5.10"},
+      {:req, "~> 0.5.10 or ~> 0.6.1"},
       {:jason, "~> 1.4"},
       {:excoveralls, "~> 0.18", only: :test},
       {:exvcr, "~> 0.15", only: :test},
@@ -52,8 +52,7 @@ defmodule AbacatepayElixirSdk.MixProject do
   defp description do
     """
     Official Elixir SDK for AbacatePay - Brazil's modern payment platform.
-    Provides complete API integration for PIX payments, billing, customer management,
-    coupons, and withdrawals with robust error handling and comprehensive testing.
+    Integrates with the v2 payments API and supports existing v1 integrations.
     """
   end
 
@@ -63,11 +62,13 @@ defmodule AbacatepayElixirSdk.MixProject do
       licenses: ["MIT"],
       links: %{
         "GitHub" => @source_url,
-        "Documentation" => "https://docs.abacatepay.com",
+        "SDK documentation" => "https://hexdocs.pm/abacatepay_elixir_sdk",
+        "API reference" => "https://docs.abacatepay.com/pages/reference/introduction",
         "AbacatePay" => "https://abacatepay.com"
       },
       maintainers: ["AbacatePay Team"],
-      files: ~w(lib test config mix.exs README.md CHANGELOG.md LICENSE),
+      files:
+        ~w(lib test config mix.exs README.md README.pt-BR.md guides CONTRIBUTING.md CHANGELOG.md LICENSE),
       exclude_patterns: [~r/test\/fixtures\/vcr_cassettes\/.*/]
     ]
   end
@@ -81,12 +82,15 @@ defmodule AbacatepayElixirSdk.MixProject do
       homepage_url: "https://abacatepay.com",
       extras: [
         "README.md",
+        "README.pt-BR.md",
+        "guides/migrating-to-v2.md",
         "CHANGELOG.md",
         "CONTRIBUTING.md",
         "LICENSE"
       ],
       groups_for_modules: [
-        "API Clients": [
+        "API v2": ~r/^AbacatepayElixirSdk\.V2(\.|$)/,
+        "API v1 clients": [
           AbacatepayElixirSdk.BillingClient,
           AbacatepayElixirSdk.CustomerClient,
           AbacatepayElixirSdk.PixClient,
@@ -101,7 +105,7 @@ defmodule AbacatepayElixirSdk.MixProject do
           AbacatepayElixirSdk.Response,
           AbacatepayElixirSdk.Error
         ],
-        "Data Structures": [
+        "API v1 data structures": [
           AbacatepayElixirSdk.Billing,
           AbacatepayElixirSdk.Billing.Product,
           AbacatepayElixirSdk.Customer,

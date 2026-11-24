@@ -1,17 +1,6 @@
 defmodule AbacatepayElixirSdk.CouponClient do
   @moduledoc """
-  Client for Coupon operations.
-
-  Provides functions to create and list discount coupons.
-
-  ## Examples
-
-      # Create a coupon
-      params = %{code: "SAVE20", discount: 20, discount_type: "PERCENTAGE"}
-      {:ok, %Coupon{} = coupon} = CouponClient.create(params)
-
-      # List all coupons
-      {:ok, coupons} = CouponClient.list()
+  V1 discount coupons. For v2, see `AbacatepayElixirSdk.V2.Coupons`.
   """
 
   alias AbacatepayElixirSdk.HttpClient
@@ -19,31 +8,16 @@ defmodule AbacatepayElixirSdk.CouponClient do
   alias AbacatepayElixirSdk.Coupon
 
   @doc """
-  Creates a new coupon.
+  Create a v1 coupon. Percentage discounts use hundredths of a percentage point.
 
-  ## Parameters
+      alias AbacatepayElixirSdk.CouponClient
 
-    * `params` - Map with the following keys:
-      * `:code` (required) - Coupon code
-      * `:discount` (required) - Discount value
-      * `:discount_type` (required) - Type ("PERCENTAGE" or "FIXED")
-      * `:max_uses` (optional) - Maximum number of uses
-      * `:expires_at` (optional) - Expiration timestamp
-
-  ## Returns
-
-    * `{:ok, %Coupon{}}` - The created coupon
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      params = %{
-        code: "SUMMER2024",
-        discount: 15,
-        discount_type: "PERCENTAGE",
-        max_uses: 100
-      }
-      {:ok, coupon} = CouponClient.create(params)
+      CouponClient.create(%{
+        code: "GUIDE10",
+        discountKind: "PERCENTAGE",
+        discount: 1000,
+        notes: "10% off the guide"
+      })
   """
   @spec create(map()) :: {:ok, Coupon.t()} | {:error, AbacatepayElixirSdk.Error.t()}
   def create(params) do
@@ -51,19 +25,7 @@ defmodule AbacatepayElixirSdk.CouponClient do
     |> Response.parse(struct: Coupon)
   end
 
-  @doc """
-  Lists all coupons.
-
-  ## Returns
-
-    * `{:ok, [%Coupon{}]}` - List of coupons
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      {:ok, coupons} = CouponClient.list()
-      active_coupons = Enum.filter(coupons, & &1.active)
-  """
+  @doc "List v1 coupons as `AbacatepayElixirSdk.Coupon` structs."
   @spec list() :: {:ok, [Coupon.t()]} | {:error, AbacatepayElixirSdk.Error.t()}
   def list do
     HttpClient.request(:get, "/coupon/list")

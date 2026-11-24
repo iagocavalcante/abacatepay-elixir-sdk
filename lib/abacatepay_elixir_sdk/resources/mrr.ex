@@ -6,12 +6,12 @@ defmodule AbacatepayElixirSdk.Mrr do
 
   ## Fields
 
-    * `:mrr` - Monthly recurring revenue value in cents
-    * `:active_subscriptions` - Total count of active subscriptions
+    * `:mrr` - In current v1 responses, a map containing `"currency"` and a `"value"` in centavos
+    * `:active_subscriptions` - Optional legacy count. V2 exposes the count as `data["totalActiveSubscriptions"]["value"]`.
   """
 
   @type t :: %__MODULE__{
-          mrr: integer() | nil,
+          mrr: map() | integer() | nil,
           active_subscriptions: integer() | nil
         }
 

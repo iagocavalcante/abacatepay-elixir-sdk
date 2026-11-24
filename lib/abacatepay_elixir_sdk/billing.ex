@@ -11,7 +11,7 @@ defmodule AbacatepayElixirSdk.Billing do
     * `:amount` - Total amount in cents
     * `:status` - Billing status (e.g., "PENDING", "PAID", "EXPIRED")
     * `:description` - Billing description
-    * `:frequency` - Payment frequency (e.g., "ONE_TIME", "MONTHLY")
+    * `:frequency` - Payment frequency (`ONE_TIME` or `MULTIPLE_PAYMENTS`)
     * `:methods` - Available payment methods
     * `:products` - List of products in the billing
     * `:metadata` - Additional metadata
@@ -19,8 +19,6 @@ defmodule AbacatepayElixirSdk.Billing do
     * `:created_at` - Creation timestamp
     * `:expires_at` - Expiration timestamp
   """
-
-  alias AbacatepayElixirSdk.Billing.Product
 
   @type t :: %__MODULE__{
           id: String.t() | nil,
@@ -30,7 +28,7 @@ defmodule AbacatepayElixirSdk.Billing do
           description: String.t() | nil,
           frequency: String.t() | nil,
           methods: [String.t()] | nil,
-          products: [Product.t()] | nil,
+          products: [map()] | nil,
           metadata: map() | nil,
           customer: map() | nil,
           created_at: String.t() | nil,

@@ -1,0 +1,32 @@
+[
+  {
+    "request": {
+      "method": "post",
+      "url": "https://api.abacatepay.com/v2/products/create",
+      "body": "{\"externalId\":\"guide\",\"name\":\"Guide\",\"price\":1999,\"currency\":\"BRL\"}"
+    },
+    "response": {
+      "type": "ok",
+      "status_code": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"data\":{\"id\":\"prod_test\",\"price\":1999},\"success\":true,\"error\":null}"
+    }
+  },
+  {
+    "request": {
+      "method": "post",
+      "url": "https://api.abacatepay.com/v2/checkouts/create",
+      "body": "{\"items\":[{\"id\":\"prod_test\",\"quantity\":1}],\"methods\":[\"PIX\"]}"
+    },
+    "response": {
+      "type": "ok",
+      "status_code": 200,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": "{\"data\":{\"id\":\"bill_test\",\"url\":\"https://example.com/pay/bill_test\",\"status\":\"PENDING\"},\"success\":true,\"error\":null}"
+    }
+  }
+]

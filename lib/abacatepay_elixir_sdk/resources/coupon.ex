@@ -2,7 +2,9 @@ defmodule AbacatepayElixirSdk.Coupon do
   @moduledoc """
   Coupon resource struct.
 
-  Represents a discount coupon in the AbacatePay system.
+  The v1 client copies matching API fields into this legacy struct. The coupon
+  code is returned as `id` in the documented v1 response. For the full coupon
+  data, including `"status"` and `"maxRedeems"`, see `AbacatepayElixirSdk.V2.Coupons`.
 
   ## Fields
 

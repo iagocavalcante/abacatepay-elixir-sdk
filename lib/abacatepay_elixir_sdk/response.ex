@@ -1,6 +1,6 @@
 defmodule AbacatepayElixirSdk.Response do
   @moduledoc """
-  Shared response parsing for AbacatePay API responses.
+  Response parsing for the API v1 clients. V2 resource functions preserve the JSON envelope.
 
   Provides consistent handling of API responses, including:
   - Success responses with data extraction

@@ -11,7 +11,7 @@ defmodule AbacatepayElixirSdk.Withdraw do
     * `:id` - Unique withdrawal identifier
     * `:external_id` - External identifier for the withdrawal
     * `:amount` - Withdrawal amount in cents
-    * `:status` - Withdrawal status (e.g., "PENDING", "COMPLETED", "FAILED")
+    * `:status` - Withdrawal status (e.g., `PENDING`, `COMPLETE` or `CANCELLED`)
     * `:pix_key` - PIX key for the withdrawal destination
     * `:pix_key_type` - Type of PIX key (e.g., "CPF", "EMAIL", "PHONE", "RANDOM")
     * `:created_at` - Creation timestamp

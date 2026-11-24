@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-24
+
+- Added 15 resource modules under `AbacatepayElixirSdk.V2` covering the 61 HTTP operations in the November 17, 2026 [AbacatePay specification](https://github.com/AbacatePay/documentation/blob/3ca540002121c2c3fc502b9cfbb48697ffea9849/openapi.yaml).
+- V2 returns the JSON envelope, including pagination cursors, and uses `:v2_api_token`. Public MRR reads `:public_mrr_token`. Existing clients continue to use v1 and `:api_token`. [Migration guide](guides/migrating-to-v2.md)
+- Added English and Brazilian Portuguese quick starts, endpoint references for every v2 operation and instructions for testing integrations offline.
+- Updated the locked HTTP dependencies and redacted the development bearer token from v1 test recordings.
+
 ## [0.2.0] - 2026-01-21
 
 ### Added
@@ -95,6 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Coverage for success and error scenarios
 - Separate test configurations for different environments
 
-[Unreleased]: https://github.com/iagocavalcante/abacatepay-elixir-sdk/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/iagocavalcante/abacatepay-elixir-sdk/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/iagocavalcante/abacatepay-elixir-sdk/releases/tag/v0.1.0
+[Unreleased]: https://github.com/iagocavalcante/abacatepay-elixir-sdk/compare/v0.3.0...main
+[0.3.0]: https://hex.pm/packages/abacatepay_elixir_sdk/0.3.0
+[0.2.0]: https://hex.pm/packages/abacatepay_elixir_sdk/0.2.0
+[0.1.0]: https://hex.pm/packages/abacatepay_elixir_sdk/0.1.0

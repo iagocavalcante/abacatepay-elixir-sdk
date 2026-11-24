@@ -1,20 +1,6 @@
 defmodule AbacatepayElixirSdk.PixClient do
   @moduledoc """
-  Client for PIX QR Code operations.
-
-  Provides functions to create, check, and simulate PIX payments.
-
-  ## Examples
-
-      # Create a PIX QR code
-      params = %{amount: 1999, description: "Order #123"}
-      {:ok, %Pix{} = pix} = PixClient.create_qrcode(params)
-
-      # Check payment status
-      {:ok, %Pix{status: status}} = PixClient.check_status(pix.id)
-
-      # Simulate payment (sandbox only)
-      {:ok, %Pix{status: "PAID"}} = PixClient.simulate_payment(pix.id)
+  V1 PIX QR code payments. For v2 PIX charges, see `AbacatepayElixirSdk.V2.Transparents`.
   """
 
   alias AbacatepayElixirSdk.HttpClient
@@ -22,25 +8,12 @@ defmodule AbacatepayElixirSdk.PixClient do
   alias AbacatepayElixirSdk.Pix
 
   @doc """
-  Creates a new PIX QR Code.
+  Create a v1 PIX charge. Send the amount in centavos and optional `expiresIn` in seconds.
 
-  ## Parameters
+      alias AbacatepayElixirSdk.PixClient
 
-    * `params` - Map with the following keys:
-      * `:amount` (required) - Payment amount in cents
-      * `:description` (optional) - Payment description
-      * `:expires_in` (optional) - Expiration time in seconds
-
-  ## Returns
-
-    * `{:ok, %Pix{}}` - The created PIX QR code
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      params = %{amount: 1999, description: "Premium subscription"}
-      {:ok, pix} = PixClient.create_qrcode(params)
-      IO.puts(pix.br_code)
+      {:ok, pix} = PixClient.create_qrcode(%{amount: 1999, expiresIn: 3600})
+      pix.br_code
   """
   @spec create_qrcode(map()) :: {:ok, Pix.t()} | {:error, AbacatepayElixirSdk.Error.t()}
   def create_qrcode(params) do
@@ -48,26 +21,7 @@ defmodule AbacatepayElixirSdk.PixClient do
     |> Response.parse(struct: Pix)
   end
 
-  @doc """
-  Simulates a payment for a PIX QR Code.
-
-  **Note:** This function only works in sandbox/development mode.
-
-  ## Parameters
-
-    * `id` - PIX QR code ID
-    * `metadata` - Optional metadata map
-
-  ## Returns
-
-    * `{:ok, %Pix{}}` - The updated PIX with status "PAID"
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      {:ok, pix} = PixClient.simulate_payment("pix_abc123")
-      pix.status # => "PAID"
-  """
+  @doc "Mark a v1 PIX charge as paid in test mode, optionally supplying a metadata map."
   @spec simulate_payment(String.t(), map()) ::
           {:ok, Pix.t()} | {:error, AbacatepayElixirSdk.Error.t()}
   def simulate_payment(id, metadata \\ %{}) do
@@ -78,27 +32,7 @@ defmodule AbacatepayElixirSdk.PixClient do
     |> Response.parse(struct: Pix)
   end
 
-  @doc """
-  Checks the status of a PIX QR Code payment.
-
-  ## Parameters
-
-    * `id` - PIX QR code ID
-
-  ## Returns
-
-    * `{:ok, %Pix{}}` - The current PIX state
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
-
-      {:ok, pix} = PixClient.check_status("pix_abc123")
-      case pix.status do
-        "PAID" -> handle_paid()
-        "PENDING" -> handle_pending()
-        "EXPIRED" -> handle_expired()
-      end
-  """
+  @doc "Get the status of a v1 PIX charge by its ID."
   @spec check_status(String.t()) :: {:ok, Pix.t()} | {:error, AbacatepayElixirSdk.Error.t()}
   def check_status(id) do
     HttpClient.request(:get, "/pixQrCode/check", params: [id: id])

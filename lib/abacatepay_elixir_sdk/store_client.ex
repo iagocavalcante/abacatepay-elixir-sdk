@@ -1,13 +1,6 @@
 defmodule AbacatepayElixirSdk.StoreClient do
   @moduledoc """
-  Client for Store operations.
-
-  Provides functions to retrieve store information and balance.
-
-  ## Examples
-
-      {:ok, %Store{} = store} = StoreClient.get()
-      IO.puts("Balance: \#{store.balance}")
+  V1 store details and balance. For v2, see `AbacatepayElixirSdk.V2.Stores`.
   """
 
   alias AbacatepayElixirSdk.HttpClient
@@ -15,18 +8,12 @@ defmodule AbacatepayElixirSdk.StoreClient do
   alias AbacatepayElixirSdk.Store
 
   @doc """
-  Gets the current store details and balance.
+  Get the store and its balances in centavos.
 
-  ## Returns
-
-    * `{:ok, %Store{}}` - Store information including balance
-    * `{:error, %Error{}}` - Error details
-
-  ## Examples
+      alias AbacatepayElixirSdk.StoreClient
 
       {:ok, store} = StoreClient.get()
-      IO.puts("Store: \#{store.name}")
-      IO.puts("Available: R$ \#{store.available_balance / 100}")
+      store.balance["available"]
   """
   @spec get() :: {:ok, Store.t()} | {:error, AbacatepayElixirSdk.Error.t()}
   def get do
